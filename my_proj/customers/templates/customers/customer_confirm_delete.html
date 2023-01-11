@@ -1,0 +1,5 @@
+<h1>Customer Delete</h1>
+<form method="post">{% csrf_token %}
+    ¿Seguro que desea eliminar "{{ object }}" ?
+    <input type="submit" value="Submit" />
+</form>
