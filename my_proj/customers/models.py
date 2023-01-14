@@ -1,11 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.utils import timezone
-# Create your models here.
-
 from django.db import models
 from django.urls import reverse
-
+from django.db.models.signals import post_save
+# Create your models here.
 class Customer(models.Model):
     name = models.CharField(max_length=20)
     paternal_surname = models.CharField(max_length=20)
@@ -17,14 +16,23 @@ class Customer(models.Model):
     def get_absolute_url(self):
         return reverse('customer_edit', kwargs={'pk': self.pk})
 
-class Payments_Customers(models.Model):
+class Payment_Customer(models.Model):
     amount = models.FloatField()
     customer_id =  models.ForeignKey(Customer, on_delete=models.CASCADE)
     product_name  = models.CharField(max_length=20)
     quantity = models.IntegerField()
     #
+    #
+
     def __str__(self):
-        return "%f %i %s %i" % (self.amount,self.customer_id,self.product_name,self.quantity)
+        print(type(self.amount))
+        print(type(self.customer_id))
+        print(type(self.product_name))
+        print(type(self.quantity))
+        return "%f %s %i" % (self.amount,self.product_name,self.quantity)
+
+    def get_absolute_url(self):
+        return reverse('payments_customers_list', kwargs={'customer_id': self.customer_id})
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -64,7 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
@@ -74,3 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_short_name(self):
         return self.name or self.email.split('@')[0]
+
+    def get_is_super(self):
+        return self.is_superuser
+    def get_absolute_url(self):
+        return "/users/%i/" % (self.pk)

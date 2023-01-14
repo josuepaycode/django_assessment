@@ -63,3 +63,11 @@ Crear un API REST
    - Endpoint para insertar customers
    - Solo los administradores con el rol super_administrator podran ejecutar creciones, ediciones y eliminaciones
 
+Para iniciar sesión como super administrador se ocupa
+correo:isra.rios.con@gmail.com
+password:as
+Para iniciar sesión como administrador se ocupa
+correo rod.rios@gmail.com
+password:as
+
+Se ocupa iniciar la app de manera local, dar clic en iniciar sesión

@@ -54,14 +54,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'my_proj.urls'
-LOGIN_REDIRECT_URL = "/"
+BASE_URL = "login"
+LOGIN_REDIRECT_URL = "/customers"
+LOGOUT_REDIRECT_URL = 'login'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
                  os.path.join(BASE_DIR, 'templates'),
-                 os.path.join(BASE_DIR, 'customers', 'templates', 'customers')],
+                 os.path.join(BASE_DIR, 'customers', 'templates', 'customers'),
+                 os.path.join(BASE_DIR, 'customers', 'templates', 'payments_customers')
+                 
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
