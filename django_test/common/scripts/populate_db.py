@@ -3,6 +3,9 @@ from django.db import transaction
 
 from faker import Faker
 
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User, Permission
+
 from customers.models import Customer
 from payments.models import Payment
 
@@ -32,11 +35,40 @@ def run():
 
     # Creating super administrator
     User.objects.create_superuser("superadmin", "superadmin@paycode.com", "superadmin_pass")
-    print("¡Admins created successfully!")
+    print("¡Superadmin have been created successfully!")
     print("")
-    print("New super user was added:")
     print("username: superadmin")
     print("email: superadmin@paycode.com")
     print("password: superadmin_pass")
     print("")
 
+    user = User.objects.create_user(
+        username='admin',
+        email='admin@paycode.com',
+        password='admin_pass'
+    )
+    user.is_staff = True
+    user.save()
+
+    # Assing permissions
+    content_type = ContentType.objects.get_for_model(Payment)
+    permissions = Permission.objects.filter(content_type=content_type)
+
+    for perm in permissions:
+        if perm.codename == "view_payment":
+            user.user_permissions.add(perm)
+
+    content_type = ContentType.objects.get_for_model(Customer)
+    permissions = Permission.objects.filter(content_type=content_type)
+
+    for perm in permissions:
+        if perm.codename == "view_customer":
+            user.user_permissions.add(perm)
+
+    print("¡Admin have been created successfully!")
+    print("")
+    print("username: admin")
+    print("email: admin@paycode.com")
+    print("password: admin_pass")
+    print("")
+    

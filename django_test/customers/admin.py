@@ -12,3 +12,18 @@ class CustomerAdmin(admin.ModelAdmin):
         "email",
         "id",
     )
+
+    def has_add_permission(self, request, obj=None):
+        if request.user and request.user.is_superuser:
+            return True
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        if request.user and request.user.is_superuser:
+            return True
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user and request.user.is_superuser:
+            return True
+        return False
