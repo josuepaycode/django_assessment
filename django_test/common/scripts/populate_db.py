@@ -1,4 +1,5 @@
 import random
+from django.db import transaction
 
 from faker import Faker
 
@@ -9,7 +10,7 @@ from django.contrib.auth.models import User
 
 fake = Faker()
 
-
+@transaction.atomic
 def run():
     # Creating custormers
     for i in range(0, 5):
@@ -26,7 +27,7 @@ def run():
             amount=fake.pyfloat(left_digits=3, right_digits=3), 
             product_name=fake.name(), 
             quantity=fake.pyint(),
-            customer_id=random.choice(customers)
+            customer=random.choice(customers)
         )
 
     # Creating super administrator
