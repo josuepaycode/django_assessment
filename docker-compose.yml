@@ -15,6 +15,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - SQL_ENGINE=django.db.backends.postgresql
+      - POSTGRES_NAME=postgres
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -29,6 +30,7 @@ services:
     build: .
     environment:
       - SQL_ENGINE=django.db.backends.postgresql
+      - POSTGRES_NAME=postgres
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
