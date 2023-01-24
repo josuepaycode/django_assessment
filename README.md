@@ -145,3 +145,10 @@ permite interactuar con todos los endpoints.
 
 - [Swagger](https://drf-yasg.readthedocs.io/en/stable/)
 - [SwaggerLocal](http://localhost:8000/api/doc/)
+
+```bash
+Además de lo anterior se agregar un pipeline para ejecutar los tests con ayuda de GitHub Actions 
+en cada actualización del repo
+```
+
+- [Ver Pipeline](https://github.com/josuepaycode/django_assessment/actions/runs/4000620959)
