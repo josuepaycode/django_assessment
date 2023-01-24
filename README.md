@@ -151,4 +151,4 @@ Además de lo anterior se agregar un pipeline para ejecutar los tests con ayuda 
 en cada actualización del repo
 ```
 
-- [Ver Pipeline](https://github.com/josuepaycode/django_assessment/actions/runs/4000620959)
+- [Ver Pipelines](https://github.com/josuepaycode/django_assessment/actions)
