@@ -139,5 +139,9 @@ Se implemento JWT para la autenticación de usuarios al API.
    - Solo los administradores con el rol super_administrator podran ejecutar creciones, ediciones y eliminaciones
 
 ```bash
-Para cada uno de los endpoints se puede recurrir al API Doc que brinda Swagger: http://localhost:8000/api/doc/ permite interactuar con todos los endpoints.
+Para cada uno de los endpoints se puede recurrir al API Doc que brinda Swagger configurada en el proyecto,
+permite interactuar con todos los endpoints.
 ```
+
+- [Swagger](https://drf-yasg.readthedocs.io/en/stable/)
+- [SwaggerLocal](http://localhost:8000/api/doc/)

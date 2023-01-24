@@ -1,0 +1,15 @@
+name: Continuous Integration and Delivery
+
+on: [push]
+
+jobs:
+
+  test_project:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Run tests
+        run: |
+          docker-compose -f docker-compose.yml run web python manage.py test .
