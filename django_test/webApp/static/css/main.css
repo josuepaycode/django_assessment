@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+input {
+    font-family: "Poppins", sans-serif;
+}
+button {
+    font-family: "Poppins", sans-serif !important;
+}
+.background-app{
+    background-color: #f2f1f6;
+}
+.size-app{
+    height: 100vh;
+    width: 100vw;
+}
+.img-paycode{
+    height: 100px;
+}
+.container-login{
+    height: 45vh;
+    width: 35vw;
+}
+.card-login{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+.input-field {
+    width: 95%;
+    height: 65px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns:100%;
+    padding: 0 0.4rem;
+    position: relative;
+}
+
+.input-field input {
+    background: none;
+    outline: none;
+    border: none;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #333;
+    margin-left: 1vw;
+}
+.input-field input::placeholder {
+    color: #919199;
+    font-weight: 700;
+}
+.btn-login{
+    height: 65px !important;
+    width: 30% !important;
+    font-weight: 600;
+    font-size: 1.7rem;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .container-login{
+        height: 70vh;
+        width: 90vw;
+    }
+}
+@media (max-width: 992px) {
+    .container-login{
+        height: 70vh;
+        width: 70vw;
+    }
+}
