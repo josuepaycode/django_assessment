@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../../static/css/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log in</title>
+</head>
+<body class='fade-in'>
+	<div class="div-main">
+		<div class='login'> 
+            <h1>Sign In</h1> 
+            <br>
+            <form method="POST" action="/app/login_user/">
+                {% csrf_token %}
+                <input type="text" name="user" placeholder='User' class='input_text'>
+                <input type="password" name="password" placeholder='Password' class='input_text'>
+                <input type="submit" name="login" value="Log In" class='input_submit'>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

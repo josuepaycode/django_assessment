@@ -1,0 +1,125 @@
+{% extends "master_page.html" %}
+{% load static %}
+{% block seccion %}
+    Inicio
+{% endblock seccion %}
+
+{% block extra %}    
+<title>Index</title>
+
+{% endblock %}
+
+{% block contenido %}
+<a href="{% url 'logout_user' %}" class="input_submit" align-left>Log out</a>
+<div class="div-main">
+    
+    <div class="div-card">
+        <h1>Customers List
+            {% if rol == 'S' %}
+            <input type="button" name="add" onclick="addCustomer()" value="Add+" class="input_submit" style="background-color: #00aaaf" align="right">
+            {% endif %}
+        </h1>
+        <table class="separate">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Paternal Surname</th>
+                    <th>Email</th>
+                    <th>Payments List</th>
+                    {% if rol == 'S' %}
+                    <th></th>
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.paternal_surname }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td><button onclick="viewPayments({{ customer.id }})" class="input_submit">View</button></td>
+                    {% if rol == 'S' %}
+                    <td><button onclick="editCustomer({{ customer.id }} )" class="input_submit" style="background-color: #048024">Edit Customer</button></th>
+                    <td><button onclick="deleteCustomer('{{customer.id}}','{{customer.name}}')" class="input_submit" style="background-color:red">Delete Customer</button></th>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% for customer in customers %}
+        <table id="{{ customer.id }}" class="table-hover">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for payment in payments %}
+                {% if payment.customer.id == customer.id %}
+                    <tr>
+                        <td>{{payment.product_name}}</td>
+                        <td>{{payment.quantity}}</td>
+                        <td>${{payment.amount}}</td>
+                    </tr>
+                {% endif %}       
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+        
+    </div>
+    
+</div>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span id="editClose" class="close">X</span>
+        <h1 align="center" style="color: #048024">Edit Customer</h1>
+        <hr>
+        <form method="POST" action="/app/customer/put">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="id">
+            <input type="text" id="name" name="name" placeholder='Name' class='input_text'>
+            <input type="text" id="paternal_surname" name="paternal_surname" placeholder='Paternal Surname' class='input_text'>
+            <input type="text" id="email" name="email" placeholder='Email' class='input_text'>
+            <input type="submit" name="save" value="Save" class='input_submit' style="background-color: #048024">
+        </form>
+    </div>
+</div>
+<div id="addModal" class="modal" >
+    <div class="modal-content">
+        <div >
+            <span id="addClose" class="close">X</span>
+            <h1 align="center" style="color: #00aaaf">Add Customer</h1>
+            <hr>
+        </div>
+        <form method="POST" action="/app/customer/post">
+            {% csrf_token %}
+            <input type="text" id="name" name="name" placeholder='Name' class='input_text'>
+            <input type="text" id="paternal_surname" name="paternal_surname" placeholder='Paternal Surname' class='input_text'>
+            <input type="text" id="email" name="email" placeholder='Email' class='input_text'>
+            <input type="submit" name="save" value="Save" class='input_submit' style="background-color: #00aaaf">
+        </form>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span id="deleteClose" class="close">X</span>
+        <h1 align="center">Delete Customer</h1>
+        <hr>
+        <form method="POST" action="/app/customer/delete">
+            {% csrf_token %}
+            <input type="hidden" name="deleteid" id="deleteid">
+            <h2>Do you want to delete: <h2 style="color: red" id="d_name"> </h2></h2>
+            <input type="button" value="No" class='input_submit' style="background-color: grey" onclick="document.getElementById('deleteModal').style.display = 'none';">
+            <input type="submit" name="delete" value="Yes" class='input_submit'>
+        </form>
+    </div>
+</div>
+{% endblock %}
