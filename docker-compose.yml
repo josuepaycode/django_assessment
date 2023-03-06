@@ -1,0 +1,8 @@
+services:
+  api:
+    build: ./django_test
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django_test:/django_test
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
