@@ -1,0 +1,302 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    {% block extrastatic %} {% endblock %}
+    <link rel="stylesheet" href="https://bootswatch.com/3/sandstone/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+
+    <meta charset="UTF-8">
+    <style>
+        #tabla-contenedor {
+        max-height: 300px;
+        overflow-y: scroll;
+      }
+
+      .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-contenido {
+    background-color: #fff;
+    width: 75%;
+    max-width: 1000px;
+    margin: 100px auto;
+    padding: 200px;
+    text-align: center;
+}
+
+
+      </style>
+    <title>{% block title %} Document {% endblock %}</title>
+</head>
+
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+      
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="{% url 'logouts' %}">Salir</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    {% endblock %}
+
+    <div class="container">
+        {% block content %}
+        <h4> Bloque de contenido </h4>
+        {% endblock %} {% block footer %} {% endblock%}
+    </div>
+
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+
+<script>
+
+function login(){
+        var user = document.getElementById("user").value
+        var password = document.getElementById("password").value
+
+        $.ajax({
+        url:"{% url 'login_response' %}",
+        type: 'get',
+        data:{
+            'user':user,
+            'password':password,
+        },
+        dataType:'json',
+        success: function (data) {
+            if (data.mensaje == 'usuario correcto'){
+                location.href ="{% url 'menu' %}"
+
+            }
+            else{
+                alert(data.mensaje)
+            console.log(data.mensaje)
+            }
+
+
+            }
+
+    })
+            
+
+}
+
+    function create_customer(){
+            var name = document.getElementById("Name").value
+            var paternal_surname = document.getElementById("Paternal_surname").value
+            var email = document.getElementById("Email").value
+    
+            $.ajax({
+            url:"{% url 'create_customer' %}",
+            type: 'get',
+            data:{
+                'name':name,
+                'paternal_surname':paternal_surname,
+                'email':email
+
+            },
+            dataType:'json',
+            success: function (data) {
+                if (data.mensaje == 'Se creo customer correctamente'){
+                    alert(data.mensaje)
+                    vistas(data)
+                }
+                else{
+                    alert(data.mensaje)
+                console.log(data.mensaje)
+                }
+    
+    
+                }
+    
+        })
+                
+    
+    }
+    
+    
+
+    function eliminar_customer(id){
+        $.ajax({
+        url:"{% url 'eliminar_customer' %}",
+        type: 'get',
+        data:{
+            'id':id,
+        },
+        dataType:'json',
+        success: function (data) {
+
+                alert(data.mensaje)
+            console.log(data.mensaje)
+            vistas(data)
+
+
+                
+            }
+    })
+            
+    }
+
+    function vistas(data){
+        $("#cuerpo").html("");
+ //llenado de datos en tabla
+        for (var i in data.list_objects){
+        var tr = `<tr>
+            <td>`+data.list_objects[i].pk+`</td>
+            <td>`+data.list_objects[i].name+`</td>
+            <td>`+data.list_objects[i].paternal_surname+`</td>
+            <td>`+data.list_objects[i].email+`</td>
+            {% if rol == "super_administrator"%}
+            <td>  
+                <button onclick="abrir_modal(${data.list_objects[i].pk})" class="btn btn-primary btn-md">editar</button>
+                <button onclick="eliminar_customer(${data.list_objects[i].pk})" class="btn btn-primary btn-md">eliminar</button>
+                        </td>
+            {% endif %}
+      
+        </tr>`;
+        $("#cuerpo").append(tr)      }
+        //llenado de paguinacion 
+
+        $("#cuerpo2").html("");
+        //llenado de datos en tabla
+        console.log(data.list_objects2)
+        for (var i in data.list_objects2){
+        var tr = `<tr>
+            <td>`+data.list_objects2[i].pk+`</td>
+            <td>`+data.list_objects2[i].amount+`</td>
+            <td>`+data.list_objects2[i].customer_id+`</td>
+            <td>`+data.list_objects2[i].product_name+`</td>
+            <td>`+data.list_objects2[i].quantity+`</td>
+  
+        </tr>`;
+        $("#cuerpo2").append(tr)      }
+        //llenado de paguinacion 
+
+    }
+
+var btnCerrar = document.getElementById("btnCerrar");
+var miModal = document.getElementById("miModal");
+
+btnCerrar.onclick = function() {
+    miModal.style.display = "none";
+}
+
+
+function abrir_modal(id){
+    var boton_editar = id
+    $.ajax({
+        url:"{% url 'consulta_editar' %}",
+        type: 'get',
+        data:{'id':boton_editar},
+        dataType:'json',
+        success: function (data) {
+
+    $("#avisos2").html("");
+    var tr = 
+    `
+    <div id="miModal" class="modal" style="display:none">
+     <div class="modal-contenido">
+        <h2>Editar Registro `+data[0].pk+`</h2>
+
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">name</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" name="name" id="name" placeholder="name" value=`+data[0].name+`>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">paternal_surname</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="paternal_surname" placeholder="paternal_surname" value=`+data[0].paternal_surname+`>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="email" placeholder="email" value=`+data[0].email+`>
+      </div>
+    </div>    
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <input class="btn btn-default" onclick="editar_customer(`+data[0].pk+`);" onclick="cerrar_aviso()" type="submit" value="Ingresar">
+      </div>
+    </div>
+    </div>
+
+    </div>`;
+
+    $("#avisos2").append(tr)
+    var btnAbrir = document.getElementById("btnAbrir");
+    var miModal = document.getElementById("miModal");
+
+        miModal.style.display = "block";
+            }
+    }) 
+}
+
+
+function editar_customer(id){
+    var name = document.getElementById("name").value
+    var paternal_surname = document.getElementById("paternal_surname").value
+    var email = document.getElementById("email").value
+    
+    console.log("jiji"+name)
+    $.ajax({
+    url:"{% url 'editar_customer' %}",
+    type: 'get',
+    data:{
+        'name':name,
+        'paternal_surname':paternal_surname,
+        'email':email,
+        'id':id
+
+
+    },
+    dataType:'json',
+    success: function (data) {
+        if (data.mensaje == 'Se actualizo correctamente'){
+            alert(data.mensaje)
+            vistas(data)
+            var modal = document.getElementById("miModal");
+            modal.style.display = "none";
+        }
+        else{
+            alert(data.mensaje)
+        console.log(data.mensaje)
+        }
+
+
+        }
+    
+        })
+                
+    
+    }
+</script>
+</body>
+
+</html>
