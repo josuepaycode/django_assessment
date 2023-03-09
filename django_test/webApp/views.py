@@ -2,8 +2,8 @@ from rest_framework import serializers, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .serializers import CustomerSerializer
-from .models import Customer
+from .serializers import CustomerSerializer, CustomerPaymentSerializer
+from .models import Customer, CustomerPayment
 from .services import create_customer_payments
 
 
@@ -75,3 +75,17 @@ def delete_customer(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     customer.delete()
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def view_customer_payments(request, pk):
+    """Endpoint for list all customer payments"""
+    payments = CustomerPayment.objects.filter(customer_id=pk)
+
+    if payments:
+        serializer = CustomerPaymentSerializer(payments, many=True)
+        return Response(serializer.data)
+    return Response(
+        status=status.HTTP_204_NO_CONTENT,
+        data=[],
+    )

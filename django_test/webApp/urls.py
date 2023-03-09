@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.api_overview, name='home'),
+    path('customer/<int:pk>/payments', views.view_customer_payments, name='view-customer-payment'),
     path('customer/<int:pk>/delete', views.delete_customer, name='delete-customer'),
     path('customer/<int:pk>/update', views.update_customer, name='update-customer'),
     path('customer/create', views.add_customer, name='add-customer'),
