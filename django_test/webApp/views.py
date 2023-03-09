@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .serializers import CustomerSerializer
 from .models import Customer
+from .services import create_customer_payments
 
 
 @api_view(['GET'])
@@ -28,6 +29,7 @@ def add_customer(request):
 
     if customer.is_valid() :
         customer.save()
+        create_customer_payments(customer.data['id'])
         return Response(
             status=status.HTTP_201_CREATED,
             data=customer.data,
