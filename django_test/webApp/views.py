@@ -1,6 +1,7 @@
 from rest_framework import serializers, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .serializers import CustomerSerializer, CustomerPaymentSerializer
 from .models import Customer, CustomerPayment

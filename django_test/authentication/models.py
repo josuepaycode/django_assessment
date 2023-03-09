@@ -1,4 +1,6 @@
+import jwt
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -7,6 +9,7 @@ from django.contrib.auth.models import (
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from datetime import datetime, timedelta
 
 
 class CustomUserManager(UserManager):
@@ -99,4 +102,14 @@ class Administrator(AbstractBaseUser, PermissionsMixin):
 
     @property
     def token(self):
-        return ''
+        token = jwt.encode(
+            {
+                'name': self.name,
+                'email': self.email,
+                'role': self.role,
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            },
+            settings.SECRET_KEY,
+            algorithm='HS256',
+        )
+        return token
