@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -22,18 +21,3 @@ class CustomerPayment(models.Model):
 
     def __str__(self) -> str:
         return f"{self.product_name} {self.customer_id}"
-
-
-class Administrator(models.Model):
-    """Admin Model"""
-    class AdminRol(models.TextChoices):
-        """AdminRol Choice Class"""
-        ADMINISTRATOR = 'administrator'
-        SUPER_ADMINISTRATOR = 'super_administrator'
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=250)
-    rol = models.CharField(max_length=250, choices=AdminRol.choices)
-
-    def __str__(self) -> str:
-        return self.name
