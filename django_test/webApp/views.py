@@ -27,14 +27,13 @@ def add_customer(request):
     if Customer.objects.filter(**request.data).exists():
         raise serializers.ValidationError('This data already exists')
 
-    if customer.is_valid() :
-        customer.save()
-        create_customer_payments(customer.data['id'])
-        return Response(
-            status=status.HTTP_201_CREATED,
-            data=customer.data,
-        )
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    customer.is_valid(raise_exception=True)
+    customer.save()
+    create_customer_payments(customer.data['id'])
+    return Response(
+        status=status.HTTP_201_CREATED,
+        data=customer.data,
+    )
 
 
 @api_view(['GET'])
@@ -61,12 +60,9 @@ def update_customer(request, pk):
         data=request.data,
         partial=True,
     )
-
-    if data.is_valid():
-        data.save()
-        return Response(data.data)
-
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    data.is_valid(raise_exception=True)
+    data.save()
+    return Response(data.data)
 
 
 @api_view(['DELETE'])
@@ -80,9 +76,10 @@ def delete_customer(request, pk):
 @api_view(['GET'])
 def view_customer_payments(request, pk):
     """Endpoint for list all customer payments"""
-    payments = CustomerPayment.objects.filter(customer_id=pk)
+    customer = get_object_or_404(Customer, pk=pk)
+    payments = CustomerPayment.objects.filter(customer_id=customer.id)
 
-    if payments:
+    if payments.exists():
         serializer = CustomerPaymentSerializer(payments, many=True)
         return Response(serializer.data)
     return Response(
