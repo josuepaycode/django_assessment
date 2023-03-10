@@ -1,5 +1,5 @@
 from rest_framework import serializers, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -21,6 +21,7 @@ def api_overview(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_customer(request):
     """Endpoint for create customer"""
     customer = CustomerSerializer(data=request.data)
@@ -38,6 +39,7 @@ def add_customer(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def view_customers(request):
     """Endpoint for list all customer"""
     customers = Customer.objects.all()
@@ -52,6 +54,7 @@ def view_customers(request):
 
 
 @api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def update_customer(request, pk):
     """Endpoint for update data for a specific customer"""
     customer = get_object_or_404(Customer, pk=pk)
@@ -67,6 +70,7 @@ def update_customer(request, pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_customer(request, pk):
     """Endpoint for delete customer"""
     customer = get_object_or_404(Customer, pk=pk)
@@ -75,6 +79,7 @@ def delete_customer(request, pk):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def view_customer_payments(request, pk):
     """Endpoint for list all customer payments"""
     customer = get_object_or_404(Customer, pk=pk)
