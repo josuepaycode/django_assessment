@@ -1,11 +1,16 @@
 from rest_framework import serializers, status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .serializers import CustomerSerializer, CustomerPaymentSerializer
 from .models import Customer, CustomerPayment
 from .services import create_customer_payments
+from authentication.auth import JWTAuthentication
 
 
 @api_view(['GET'])
@@ -21,6 +26,7 @@ def api_overview(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_customer(request):
     """Endpoint for create customer"""
@@ -39,6 +45,7 @@ def add_customer(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def view_customers(request):
     """Endpoint for list all customer"""
@@ -54,6 +61,7 @@ def view_customers(request):
 
 
 @api_view(['PATCH'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def update_customer(request, pk):
     """Endpoint for update data for a specific customer"""
@@ -70,6 +78,7 @@ def update_customer(request, pk):
 
 
 @api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def delete_customer(request, pk):
     """Endpoint for delete customer"""
@@ -79,6 +88,7 @@ def delete_customer(request, pk):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def view_customer_payments(request, pk):
     """Endpoint for list all customer payments"""
