@@ -1,10 +1,18 @@
 from rest_framework import serializers, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .serializers import CustomerSerializer, CustomerPaymentSerializer
 from .models import Customer, CustomerPayment
 from .services import create_customer_payments
+from authentication.auth import JWTAuthentication
+from authentication.decorators import role_authorization
+from authentication.models import Administrator
 
 
 @api_view(['GET'])
@@ -20,6 +28,9 @@ def api_overview(request):
 
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@role_authorization([Administrator.AdminRol.SUPER_ADMINISTRATOR])
 def add_customer(request):
     """Endpoint for create customer"""
     customer = CustomerSerializer(data=request.data)
@@ -37,6 +48,12 @@ def add_customer(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@role_authorization([
+    Administrator.AdminRol.SUPER_ADMINISTRATOR,
+    Administrator.AdminRol.ADMINISTRATOR,
+])
 def view_customers(request):
     """Endpoint for list all customer"""
     customers = Customer.objects.all()
@@ -51,6 +68,9 @@ def view_customers(request):
 
 
 @api_view(['PATCH'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@role_authorization([Administrator.AdminRol.SUPER_ADMINISTRATOR])
 def update_customer(request, pk):
     """Endpoint for update data for a specific customer"""
     customer = get_object_or_404(Customer, pk=pk)
@@ -66,6 +86,9 @@ def update_customer(request, pk):
 
 
 @api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@role_authorization([Administrator.AdminRol.SUPER_ADMINISTRATOR])
 def delete_customer(request, pk):
     """Endpoint for delete customer"""
     customer = get_object_or_404(Customer, pk=pk)
@@ -74,6 +97,12 @@ def delete_customer(request, pk):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@role_authorization([
+    Administrator.AdminRol.SUPER_ADMINISTRATOR,
+    Administrator.AdminRol.ADMINISTRATOR,
+])
 def view_customer_payments(request, pk):
     """Endpoint for list all customer payments"""
     customer = get_object_or_404(Customer, pk=pk)
