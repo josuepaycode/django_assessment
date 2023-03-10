@@ -15,6 +15,9 @@ class AdministratorSerializer(serializers.ModelSerializer):
         model = Administrator
         fields = ('username', 'email', 'password', 'name', 'role')
 
+    def create(self, validated_data):
+        return Administrator.objects.create_user(**validated_data)
+
 
 class LoginSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
