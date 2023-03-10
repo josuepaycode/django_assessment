@@ -138,3 +138,137 @@ class TestCustomerServices(APITestCase, URLPatternsTestCase):
         customer_payments = CustomerPayment.objects.filter(customer_id=response_data.get('id'))
         self.assertTrue(customer_payments.exists())
         self.assertTrue(customer_payments.count() > 1)
+
+    def test_get_customer_info_by_admin(self):
+        """
+        Test if Admin can get info from endpoints:
+         - view-customers 
+         - view-customer-payment
+        """
+        # create customer
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.super_admin_token}")
+        customer_data = {
+            "name": "John",
+            "paternal_surname": "Parker",
+            "email": "john-parker@marvel.com"
+        }
+        response = client.post(
+            reverse('add-customer'),
+            customer_data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # get all customers
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.admin_token}")
+        response_customers = client.get(reverse('view-customers'))
+        self.assertEqual(response_customers.status_code, status.HTTP_200_OK)
+        customers = json.loads(response_customers.content)
+        self.assertTrue(len(customers) > 0)
+
+        # get customer payments
+        response_payments = client.get( 
+            reverse(
+                'view-customer-payment',
+                kwargs={'pk': customers[0].get('id')},
+            )
+        )
+        self.assertEqual(response_payments.status_code, status.HTTP_200_OK)
+        payments = json.loads(response_payments.content)
+        self.assertTrue(len(payments) > 0)
+        first_payment = payments[0]
+        self.assertTrue(first_payment.get('amount'))
+        self.assertTrue(first_payment.get('product_name'))
+        self.assertTrue(first_payment.get('quantity'))
+
+    def test_raises_error_when_admin_modify_customer_info(self):
+        """ Test if Admin can update and delete customer instance """
+        # create customer
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.super_admin_token}")
+        customer_data = {
+            "name": "John",
+            "paternal_surname": "Parker",
+            "email": "john-parker@marvel.com"
+        }
+        response = client.post(
+            reverse('add-customer'),
+            customer_data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        customer = Customer.objects.get(email=customer_data.get('email'))
+
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.admin_token}")
+
+        # try update
+        response = client.patch(
+            reverse('update-customer', kwargs={'pk':customer.id}),
+            {"name": "Peter"},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data, ['Insufficient permissions'])
+
+        # try delete
+        response = client.delete(
+            reverse('delete-customer', kwargs={'pk':customer.id}),
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data, ['Insufficient permissions'])
+
+    def test_get_update_delete_customer_info_by_super_admin(self):
+        """
+        Test if Super Admin can get, update and delete customer info
+        """
+        # create customer
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.super_admin_token}")
+        customer_data = {
+            "name": "John",
+            "paternal_surname": "Parker",
+            "email": "john-parker@marvel.com"
+        }
+        response = client.post(
+            reverse('add-customer'),
+            customer_data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # get all customers
+        response_customers = client.get(reverse('view-customers'))
+        self.assertEqual(response_customers.status_code, status.HTTP_200_OK)
+        customers = json.loads(response_customers.content)
+        self.assertTrue(len(customers) > 0)
+
+        # get customer payments
+        response_payments = client.get(
+            reverse(
+                'view-customer-payment',
+                kwargs={'pk': customers[0].get('id')},
+            )
+        )
+        self.assertEqual(response_payments.status_code, status.HTTP_200_OK)
+
+        # update
+        response = client.patch(
+            reverse('update-customer', kwargs={'pk': customers[0].get('id')}),
+            {"name": "Peter"},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data.get('name'), 'Peter')
+
+        # delete
+        response = client.delete(
+            reverse('delete-customer', kwargs={'pk': customers[0].get('id')}),
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Customer.objects.all().count(), 0)
