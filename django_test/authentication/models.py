@@ -1,6 +1,7 @@
 import jwt
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -46,6 +47,7 @@ class CustomUserManager(UserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(username, email, password, **extra_fields)
+
 
 class Administrator(AbstractBaseUser, PermissionsMixin):
     """
@@ -113,3 +115,18 @@ class Administrator(AbstractBaseUser, PermissionsMixin):
             algorithm='HS256',
         )
         return token
+
+
+class UserAdmin(BaseUserAdmin):
+    ordering = ['id']
+    list_display = ['email']
+    readonly_fields = ('date_joined','last_login')
+    fieldsets = (
+        (_("User Details"), {'fields': ('email', 'password')}),
+        (_("Account Details"), {'fields': ('date_joined', 'last_login')}),
+        (_("Permission"), {'fields': ('is_active', 'is_staff', 'is_admin')}),
+    )
+    add_fieldsets = (
+        ("User Details", {'fields': ('email', 'password1', 'password2')}),
+        ("Permission", {'fields': ('is_active', 'is_staff', 'is_admin')}),
+    )
