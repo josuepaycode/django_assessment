@@ -117,3 +117,24 @@ class TestCustomerServices(APITestCase, URLPatternsTestCase):
             response_data.get('email'),
             customer_data.get('email'),
         )
+
+    def test_verify_payments_have_been_created_after_customer_was_created(self):
+        """ Test if super admin can add new customer """
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.super_admin_token}")
+        customer_data = {
+            "name": "John",
+            "paternal_surname": "Parker",
+            "email": "john-parker@marvel.com"
+        }
+        response = client.post(
+            reverse('add-customer'),
+            customer_data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response_data = json.loads(response.content)
+
+        customer_payments = CustomerPayment.objects.filter(customer_id=response_data.get('id'))
+        self.assertTrue(customer_payments.exists())
+        self.assertTrue(customer_payments.count() > 1)
