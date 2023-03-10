@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if messages %}
+	{% for message in messages %}
+	  <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+	    {{ message }}
+	  </div>
+	{% endfor %}
+{% endif %}
+
+{% if request.session.rol == 'super_administrator' %}
+    <!-- <a href="{% url 'customer-create' %}" class="btn btn-primary btn-flat mt-3">
+        <i class="fas fa-plus"></i> New Customer
+    </a> -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="fas fa-plus"></i> New Customer
+    </button>
+{% endif %}
+    
+<div class="row">
+    <div class="col-7">
+        <h1>List Customers</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Paternal_surname</th>
+                    <th>Email</th>
+                    {% if request.session.rol == 'super_administrator' %}
+                    <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in object_list %}
+                <tr>
+                    <td>{{customer.pk}}</td>
+                    <td>{{customer.name}}</td>
+                    <td>{{customer.paternal_surname}}</td>
+                    <td>{{customer.email}}</td>
+                    {% if request.session.rol == 'super_administrator' %}
+                    <td>
+                        <a href="{% url 'customer-update' customer.pk %}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                        <a href="{% url 'customer-delete' customer.pk %}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-5">
+        <h1>List Payments Customers</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>amount</th>
+                    <th>customer_id</th>
+                    <th>product_name</th>
+                    <th>quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in object_list %}
+                    {% for payment in customer.payments.all %}
+                        <tr>
+                            <td>{{payment.pk}}</td>
+                            <td>{{payment.amount}}</td>
+                            <td>{{payment.customer.pk}}</td>
+                            <td>{{payment.product_name}}</td>
+                            <td>{{payment.quantity}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+  <!-- Modal Create -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add customer</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3" method="post" id="customerForm">{%csrf_token%}
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" maxlength="150" required="" id="id_name">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword" class="form-label">Paternal surname</label>
+                    <input type="text" name="paternal_surname" class="form-control" maxlength="200" required="" id="id_paternal_surname">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" maxlength="254" required="" id="id_email">
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content%}
+
+{% block extra_script %}
+ <script>
+    $(function (){
+        $("#customerForm").submit(function (event){
+            event.preventDefault();
+            const csrftoken = Cookies.get('csrftoken');
+            var formData = {
+                name: $("#id_name").val(),
+                paternal_surname: $("#id_paternal_surname").val(),
+                email: $("#id_email").val(),
+            };
+            $.ajax({
+                type:"POST",
+                dataType: "json",
+                headers: {'X-CSRFToken': csrftoken},
+                url: "{% url 'customer-create' %}",
+                data: formData,
+                success: function(response){
+                    if (response.valid == true){
+                        $("#exampleModal").modal('hide');
+                        location.reload()
+                    }  
+                },
+                error: function (response){
+                    console.log(response.error)
+                },
+            });
+        });
+    });
+ </script>
+{% endblock extra_script %}
