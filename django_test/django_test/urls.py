@@ -23,7 +23,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="PayCode API",
         default_version='v1',
-        description="Documentation for Challenge",
+        description="Documentation for Django Assessment",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="jl.garciareymundo@gmail.com"),
         license=openapi.License(name="BSD License"),
