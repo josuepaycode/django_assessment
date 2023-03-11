@@ -1,65 +1,32 @@
 # Django Assessment
 
-## Intro
 
-Esta aplicación usa python 3.8.13 y Django 4.1.3
+## Requerimientos
 
-## Listado de tareas 
+Para correr el proyecto se debe contar con docker-compose ya instalado
 
-### Tarea #1
+La aplicación usa python 3.8.13 definido en el Dockerfile
 
-#### CRUD de clientes y pagos de cliente
-
-crear 3 tablas, customers, payments_customers, administrators
-
-1. Estructura de la tabla customers
-
-   - id
-   - name
-   - paternal_surname
-   - email
-
-2. Estructura de la tabla payments_customers
-
-   - id
-   - amount
-   - customer_id
-   - product_name
-   - quantity
-
-3. Estructura de la tabla customers
-
-   - id
-   - name
-   - password
-   - rol `[administrator,super_administrator]`
-
-Crear 2 registros dummy en la tabla administrators uno con cada rol 
-
-Crear login usando la tabla administrators.
-
-   - Cuando el rol sea super_administrator, permitira editar, borrar y crear clientes
-   - Cuando el rol sea administrator solo se listaran los usuarios y pagos del usuario.
-
-Crear CRUD para la tabla customers.
-
-   - Cada ves que se inserte un registro en la tabla customers se debe crear uno o varios registros dummy en la tabla payments_customers
-
-Crear vistas de listado
-
-   - listado de customers
-   - listado de payments_customers
+En requirements se pueden observar las dependencias con sus respectivas versiones
 
 
-### Tarea #2
+## Instalación y ejecución
 
-Crear un API REST
+Ejecutar el siguiente comando para construir el contenedor y levantar el servicio
 
-   - Implementar modulo de autenticacion usando la tabla administrators
-   - Endpoint que listara customers
-   - Endpoint que listara payments_customers
-   - Endpoint para editar customers
-   - Endpoint para eliminar customers
-   - Endpoint para insertar customers
-   - Solo los administradores con el rol super_administrator podran ejecutar creciones, ediciones y eliminaciones
+```bash
+docker-compose up -d --build
+```
 
+### Servidor de backend
+El servidor se levantará en el puerto 8000
+
+La documentación de los endpoints se puede consultar accediendo en `http://localhost:8000/swagger`
+
+
+### Testing
+Se agregaron tests para comprobar el correcto funcionamiento de:
+- CRUD Customers
+- Registro de Administradores
+- Login para obtener un Token
+- Permisos basados en Roles sobre endpoints de Customers
