@@ -15,27 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from webApp.views import *
+
 urlpatterns = [
-    path("generate_jwt/", generate_jwt, name='generate_jwt'),
     path("admin/", admin.site.urls),
-    path("login/", login, name='login'),
-    path("login_response/", login_response, name='login_response'),
-    path("menu/", menu, name='menu'),
-    path("logouts/", logouts, name='logouts'),
-    path("create_customer/", create_customer, name='create_customer'),
-    path("eliminar_customer/", eliminar_customer, name='eliminar_customer'),
-    path("consulta_editar/", consulta_editar, name='consulta_editar'),
-    path("editar_customer/", editar_customer, name='editar_customer'),
-    path("list_customer/", list_customer, name='list_customer'),
-    path("list_payments_customer/", list_payments_customer, name='list_payments_customer'),
-    path("create_customer_api/", create_customer_api, name='create_customer_api'),
-    path("update_customer_api/", update_customer_api, name='update_customer_api'),
-    path("delete_customer_api/", delete_customer_api, name='delete_customer_api')
-
-
-
-
-
-
 ]
