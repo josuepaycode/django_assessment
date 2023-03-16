@@ -1,8 +1,7 @@
  # -*- coding: utf-8 -*-
 
-from django.urls import path
 from django.conf.urls import include
-
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 from webApp.views import CustomersViewSet, PaymentCustomersViewSet
 from webApp.views import main, delete_customer, show_payments,update_customer,create_customer

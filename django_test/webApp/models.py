@@ -13,7 +13,7 @@ class Customer(models.Model):
         return f"{self.name} {self.paternal_surname}"
 
 class PaymentCustomer(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount =  models.DecimalField(decimal_places=2, max_digits=10, null=False, blank=False)
     product_name = models.CharField(max_length=50, null=False, blank=False)
     quantity =  models.IntegerField(default=0)

@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .managers import CustomUserManager
 
-# Create your models here.
 class Administrators(AbstractUser):
     USER_TYPE = (
         ('administrador','Administrador'),
@@ -14,10 +13,7 @@ class Administrators(AbstractUser):
 
     USERNAME_FIELD = "name"
     REQUIRED_FIELDS = [ "password", "rol"]
-
-
     objects = CustomUserManager()
-
     def __str__(self) -> str:
         return self.name
 

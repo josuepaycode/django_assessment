@@ -9,13 +9,10 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
-        #exclude = ('user',)
 
 
 class PaymentCustomerSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    
     class Meta:
         model = PaymentCustomer
         fields = '__all__'
-        #exclude = ('user',)
