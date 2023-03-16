@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+<style>/*
+    *
+    * ==========================================
+    * CUSTOM UTIL CLASSES
+    * ==========================================
+    */
+    .nav-pills-custom .nav-link {
+        color: #aaa;
+        background: #fff;
+        position: relative;
+    }
+    
+    .nav-pills-custom .nav-link.active {
+        color: #45b649;
+        background: #fff;
+    }
+    
+    
+    /* Add indicator arrow for the active tab */
+    @media (min-width: 992px) {
+        .nav-pills-custom .nav-link::before {
+            content: '';
+            display: block;
+            border-top: 8px solid transparent;
+            border-left: 10px solid #fff;
+            border-bottom: 8px solid transparent;
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            opacity: 0;
+        }
+    }
+    
+    .nav-pills-custom .nav-link.active::before {
+        opacity: 1;
+    }
+    
+    
+    
+    
+    
+    /*
+    *
+    * ==========================================
+    * FOR DEMO PURPOSE
+    * ==========================================
+    */
+    body {
+        min-height: 100vh;
+        background: linear-gradient(to left, #dce35b, #45b649);
+    }
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.42em;
+  color:#A7A1AE;
+  background-color:#1F2739;
+}
+
+h1 {
+  font-size:3em; 
+  font-weight: 300;
+  line-height:1em;
+  text-align: center;
+  color: #4DC3FA;
+}
+
+h2 {
+  font-size:1em; 
+  font-weight: 300;
+  text-align: center;
+  display: block;
+  line-height:1em;
+  padding-bottom: 2em;
+  color: #FB667A;
+}
+
+h2 a {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FB667A;
+  text-decoration: none;
+}
+
+.blue { color: #185875; }
+.yellow { color: #FFF842; }
+
+.container th h1 {
+	  font-weight: bold;
+	  font-size: 1em;
+  text-align: left;
+  color: #185875;
+}
+
+.container td {
+	  font-weight: normal;
+	  font-size: 1em;
+  -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+	   -moz-box-shadow: 0 2px 2px -2px #0E1119;
+	        box-shadow: 0 2px 2px -2px #0E1119;
+}
+
+.container {
+	  text-align: left;
+	  overflow: hidden;
+	  width: 80%;
+	  margin: 0 auto;
+  display: table;
+  padding: 0 0 8em 0;
+}
+
+.container td, .container th {
+	  padding-bottom: 2%;
+	  padding-top: 2%;
+  padding-left:2%;  
+}
+
+/* Background-color of the odd rows */
+.container tr:nth-child(odd) {
+	  background-color: #323C50;
+}
+
+/* Background-color of the even rows */
+.container tr:nth-child(even) {
+	  background-color: #2C3446;
+}
+
+.container th {
+	  background-color: #1F2739;
+}
+
+.container td:first-child { color: #FB667A; }
+
+.container tr:hover {
+   background-color: #464A52;
+-webkit-box-shadow: 0 6px 6px -6px #0E1119;
+	   -moz-box-shadow: 0 6px 6px -6px #0E1119;
+	        box-shadow: 0 6px 6px -6px #0E1119;
+}
+
+.container td:hover {
+  background-color: #FFF842;
+  color: #403E10;
+  font-weight: bold;
+  
+  box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
+  transform: translate3d(6px, -6px, 0);
+  
+  transition-delay: 0s;
+	  transition-duration: 0.4s;
+	  transition-property: all;
+  transition-timing-function: line;
+}
+
+@media (max-width: 800px) {
+.container td:nth-child(4),
+.container th:nth-child(4) { display: none; }
+}
+.login-block {
+    width: 400px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    border-top: 5px solid #ff656c;
+    margin: 0 auto;
+}
+
+.login-block h1 {
+    text-align: center;
+    color: #000;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.login-block input {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-family: Montserrat;
+    padding: 0 10px 0 10px;
+    outline: none;
+}
+    </style>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+<body>
+    {% csrf_token %} 
+    <section class=" header">
+        <div class="container ">
+            <header class="text-center mb-5 pb-5 text-white">
+                <!--h1 class="display-4">Bootstrap vertical tabs</h1-->
+            </header>
+    
+    
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- Tabs nav -->
+                    <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link mb-3 p-3 shadow  {% if customers %} active {% endif %}" id="v-pills-home-tab" href="{% url 'main' %} " role="tab" aria-controls="v-pills-home" aria-selected="true">
+                            <i class="fa fa-user-circle-o mr-2"></i>
+                            <span class="font-weight-bold small text-uppercase">Listar Clientes</span></a>
+                        {% if is_superadmin %}
+                        <a class="nav-link mb-3 p-3 shadow" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                            <i class="fa fa-calendar-minus-o mr-2"></i>
+                            <span class="font-weight-bold small text-uppercase">Crear Clientes</span></a>
+                        {% endif %}
+                        {% if payments %}
+                        <a class="nav-link mb-3 p-3 shadow active" id="v-pills-messages-tab" href="#" aria-controls="v-pills-messages" aria-selected="false">
+                            <i class="fa fa-star mr-2"></i>
+                            <span class="font-weight-bold small text-uppercase">Payments</span></a>
+                        {% endif %}
+                        <a class="nav-link mb-3 p-3 shadow" id="v-pills-settings-tab"  href="{% url 'logout' %}" aria-controls="v-pills-settings" aria-selected="false">
+                            <i class="fa fa-check mr-2"></i>
+                            <span class="font-weight-bold small text-uppercase">Cerrar Sesion</span></a>
+                        </div>
+                </div>
+    
+    
+                <div class="col-md-9">
+                    <!-- Tabs content -->
+                    {% if customers %}
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <h1><span class="blue">Customers</span></h1>
+                        
+                                
+                                <table class="container">
+                                    <thead>
+                                        <tr>
+                                            <th><h1>id</h1></th>
+                                            <th><h1>Name</h1></th>
+                                            <th><h1>Paternal surname
+                                        </h1></th>
+                                            <th><h1>Email</h1></th>
+                                            <th><h1>Options</h1></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for customer in customers %}
+                                        <tr>
+                                            <td>{{customer.id}}</td>
+                                            <td>{{customer.name}}</td>
+                                            <td>{{customer.paternal_surname}}</td>
+                                            <td>{{customer.email}}</td>
+                                            <td>
+                                                {% if is_superadmin %}
+                                                <a href="{% url 'show_payments' customer.id %}" class="btn btn-primary" ><i class="fa fa-money" aria-hidden="true"></i></a>
+                                                <a href="{% url 'update_customer' customer.id %}" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                {% endif %}
+                                                <a href="{% url 'delete_customer' customer.id %}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                        {% endif %}
+                        {% if payments %}
+
+                        <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <h1><span class="blue">Payments Customer</span></h1>
+                        
+                                
+                                <table class="container">
+                                    <thead>
+                                        <tr>
+                                            <th><h1>id</h1></th>
+                                            <th><h1>Amount</h1></th>
+                                            <th><h1>Customer</h1></th>
+                                            <th><h1>Product name</h1></th>
+                                            <th><h1>Quantity</h1></th>
+                                            <th><h1>Options</h1></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for payment in payments %}
+                                        <tr>
+                                            <td>{{payment.id}}</td>
+                                            <td>{{payment.amount}}</td>
+                                            <td>{{payment.customer.name}}</td>
+                                            <td>{{payment.product_name}}</td>
+                                            <td>{{payment.quantity}}</td>
+                                            <td>
+                                       
+                                                <a href="{% url 'delete_customer' payment.id %}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                        {% endif %}
+                        {% if customer %}
+                        <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <h1><span class="blue">Update Customer</span></h1>
+                            <div class="login-block">
+                                <form method="post" action="{% url 'update_customer' customer.id %}">
+                                    {% csrf_token %}
+                                        <label>Name</label><input type="text" name="name" id="name" value="{{customer.name}}" required><br>
+                                        <label>Paternal Surname</label><input type="text" name="paternal_surname" id="paternal_surname"  value="{{customer.paternal_surname}}" required>
+                                        <label>Email</label><input type="email" name="email" id="email" value="{{customer.email}}" required>
+                                        <input type="submit" value="Actualizar">
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                            <h1><span class="blue">Create Customer</span></h1>
+                            <div class="login-block">
+                                <form method="post" action="{% url 'create_customer' %}">
+                                    {% csrf_token %}
+                                        <label>Name</label><input type="text" name="name" id="name" value="{{customer.name}}" required><br>
+                                        <label>Paternal Surname</label><input type="text" name="paternal_surname" id="paternal_surname"  value="{{customer.paternal_surname}}" required>
+                                        <label>Email</label><input type="email" name="email" id="email" value="{{customer.email}}" required>
+                                        <input type="submit" value="Crear">
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
